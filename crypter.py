@@ -1,14 +1,18 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+from cryptography.fernet import Fernet
 
-from Crypto.PublicKey import RSA
 
-#creation d'un couple de cles
-key = RSA.generate(1024)
+file = open('key.key','rb')
+key = file.read()
+file.close
 
-#chiffrage
-public_key = key.publickey()
-enc_data = public_key.encrypt(b"""bonjour c'est un message secret""", 32)
+with open('text.txt','rb') as f:
+	data = f.read()
 
-#affichage
+fernet = Fernet(key)
+encrypted = fernet.encrypt(data)
 
-print(enc_data)
+#write encypted file
+
+with open('text.txt.encrypted','wb') as f:
+	f.write(encrypted)
